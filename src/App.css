@@ -1,0 +1,115 @@
+body {
+    background-color: #eee
+}
+
+.container{
+    width: 600px;
+    position: relative;
+    background-color: white;
+    border: 1px solid #ddd;
+    margin-top: 30px;
+}
+
+.boxDiv{
+    margin-top: 10px;
+}
+
+.titleName{
+    text-transform: uppercase;
+    color: #000000b8;
+    text-align: center;
+}
+
+.inputStyle{
+    margin-left: 15px;
+    width: 95%;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.inputStyle:focus{
+    border-color: #66afe9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(102 175 233 / 60%);
+}
+
+.listData{
+    list-style: none;
+    margin-left: 0px;
+}
+
+.listData:hover{
+    background-color: #d9dfe62e;
+}
+
+.checkBoxStyle{
+    margin-left: 5px;
+}
+
+.listTextStyle{
+    margin-left: 15px;
+    font-size: inherit;
+    text-decoration: none;
+}
+
+.ulList{
+    margin-top: 10px !important;
+}
+
+hr{
+    margin: 6px 0;
+    color: #1914149e;
+    background-color: currentColor;
+    border: 0;
+    opacity: .25;
+}
+
+.Footer{
+    background-color: #F4FCE8;
+    width: 600px;
+    height: 40px;
+    position: relative;
+    bottom: 31px;
+}
+
+.ThirdRow{
+    position: relative;
+    margin-bottom: -23px;
+}
+
+.ulFooter{
+    margin-top: 2.5px;
+}
+
+.ulFooter > li {
+    display: inline;
+    position: relative;
+    left: 280px;
+    margin-left: 10px;
+    font-family: serif;
+    font: unset;
+}
+
+.FooterButton{
+    border: none;
+    background: #F4FCE8;
+}
+
+.active {
+    border: 1px solid #66a95687;
+    border-radius: 20%;
+}
+
+.closeIcon{
+    position: absolute;
+    left: 560px;
+    font-size: larger;
+}
+
+.footerLengthItem {
+    position: absolute;
+    left: 25px;
+}
+ .checked {
+     text-decoration: line-through;
+ }
