@@ -95,9 +95,9 @@ hr{
     background: #F4FCE8;
 }
 
-.active {
+.activeButtonBorder {
     border: 1px solid #66a95687;
-    border-radius: 20%;
+    border-radius: 10%;
 }
 
 .closeIcon{
@@ -110,6 +110,10 @@ hr{
     position: absolute;
     left: 25px;
 }
- .checked {
+ .completed {
      text-decoration: line-through;
+     color: #aaa
+ }
+ .pending {
+     text-decoration: none;
  }

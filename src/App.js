@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { CloseOutlined } from '@ant-design/icons';
+import $ from 'jquery'
 
 import './App.css';
 
@@ -24,12 +25,11 @@ function App() {
   const [inputValue, setInputValue] = useState({})
 
   const changeHandler = (e) => {
-    console.log("data", e.target.value);
     setInputValue({ ...inputValue, name: e.target.value })
   }
   console.log("listData", listData);
   console.log("listData", inputValue);
-
+  
   const handleSubmit = () => {
     console.log("add");
     if (!inputValue.id) {
@@ -43,51 +43,70 @@ function App() {
       console.log(listData);
     }
   }
-
+  
   const handleKeypress = e => {
     if (e.charCode === 13) {
       handleSubmit();
     }
   };
-
+  
   const removeEventListener = (id) => {
     let data = listData.filter((item) => item.id !== id)
     setListData(data)
   }
-
+  
   const editHandler = (data) => {
     console.log("name", data);
     setInputValue(data)
-
+    
   }
-
+  
   const toggleChecked = (id) => {
+    console.log("data+++++++++++");
     let data = listData.find((item) => item.id === id)
     let Index = listData.findIndex((item) => item.id === id)
     if(listData[Index].isChecked) {
       listData[Index] = { ...data, isChecked: false }
-      document.getElementsByClassName("listTextStyle")[Index].style["text-decoration"] = "none"
+      console.log("1111111111111");
+      document.getElementsByClassName("listData")[Index].classList.remove("completed")
+      document.getElementsByClassName("listData")[Index].classList.add("pending")
     } else {
-      document.getElementsByClassName("listTextStyle")[Index].style["text-decoration"] = "line-through"
+      console.log("222222222222");
+      document.getElementsByClassName("listData")[Index].classList.remove("pending")
+      document.getElementsByClassName("listData")[Index].classList.add("completed")
       listData[Index] = { ...data, isChecked: true }
     }
     console.log("dataaaaaaaa",listData);
   }
 
   const activeListData = () => {
+    document.getElementsByClassName("FooterButton")[0].classList.remove("activeButtonBorder")
+    document.getElementsByClassName("FooterButton")[2].classList.remove("activeButtonBorder")
+    document.getElementsByClassName("FooterButton")[1].classList.add("activeButtonBorder")
     const data = listData.filter((item) => item.isChecked !== true)
     console.log("data",data);
     setActiveData(data)
+    setCompletedArray(false)
     setActiveArray(true)
   }
-
+  
   const allListData = () => {
+    document.getElementsByClassName("FooterButton")[1].classList.remove("activeButtonBorder")
+    document.getElementsByClassName("FooterButton")[2].classList.remove("activeButtonBorder")
+    document.getElementsByClassName("FooterButton")[0].classList.add("activeButtonBorder")
     setActiveArray(false)
+    setCompletedArray(false)
   }
-
+  
   const completedListData = () => {
-    const data = listData.filter((item) => item.isChecked !== true)
-    console.log("data",data);
+    document.getElementsByClassName("FooterButton")[0].classList.remove("activeButtonBorder")
+    document.getElementsByClassName("FooterButton")[1].classList.remove("activeButtonBorder")
+    document.getElementsByClassName("FooterButton")[2].classList.add("activeButtonBorder")
+    const data = listData.filter((item) => item.isChecked === true)
+    setCompletedData(data)
+    setActiveArray(false)
+    setCompletedArray(true)
+    console.log("datasdasd",data);
   }
   return (
     <div>
@@ -108,11 +127,13 @@ function App() {
           <div className="row ThirdRow">
             <ul className="ulList">
               {
-               !activeArray ? listData.map((item, i) => {
+               !completedArray && !activeArray ? listData.map((item, i) => {
+                 const checkedLine = item.isChecked
                   return (
                     <>
-                      <li className="listData" key={i}>
-                        <input type="checkbox" className="checkBoxStyle" defaultChecked={item.isChecked} 
+                      <li className={`listData ${checkedLine ? "completed" : "pending"}`} key={i}>
+                        <input type="checkbox" className="checkBoxStyle" 
+                        isChecked={item.isChecked}
                         onChange={() => toggleChecked(item.id)}/>
                         <span className={`listTextStyle`}  onClick={() => editHandler(item)}>{item.name}</span>
                         <CloseOutlined className="closeIcon" onClick={() => removeEventListener(item.id)} />
@@ -122,11 +143,25 @@ function App() {
                   )
                 }) 
                 :
-                activeData.map((item, i) => {
+                completedArray ? completedData.map((item, i) => {
                   return (
                     <>
-                      <li className="listData" key={i}>
-                        <input type="checkbox" className="checkBoxStyle" defaultChecked={item.isChecked} 
+                      <li className="listData completed" key={i}>
+                        <input type="checkbox" className="checkBoxStyle" checked={item.isChecked} 
+                        onChange={() => toggleChecked(item.id)}/>
+                        <span className="listTextStyle"  onClick={() => editHandler(item)}>{item.name}</span>
+                        <CloseOutlined className="closeIcon" onClick={() => removeEventListener(item.id)} />
+                      </li>
+                      <hr />
+                    </>
+                  )
+                })
+                :
+                activeArray &&  activeData.map((item, i) => {
+                  return (
+                    <>
+                      <li className="listData pending" key={i}>
+                        <input type="checkbox" className="checkBoxStyle"  
                         onChange={() => toggleChecked(item.id)}/>
                         <span className="listTextStyle"  onClick={() => editHandler(item)}>{item.name}</span>
                         <CloseOutlined className="closeIcon" onClick={() => removeEventListener(item.id)} />
