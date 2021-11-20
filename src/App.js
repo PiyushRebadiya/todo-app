@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { CloseOutlined } from '@ant-design/icons';
-import $ from 'jquery'
 
 import './App.css';
 
@@ -18,6 +17,11 @@ function App() {
       isChecked: false
     }
   ])
+  const [buttonBorder, setButtonBorder] = useState({
+    all: true,
+    completed: false,
+    active: false
+  })
   const [activeData, setActiveData] = useState([])
   const [completedData, setCompletedData] = useState([])
   const [activeArray, setActiveArray] = useState(false)
@@ -62,27 +66,25 @@ function App() {
   }
   
   const toggleChecked = (id) => {
+    // debugger
     console.log("data+++++++++++");
     let data = listData.find((item) => item.id === id)
     let Index = listData.findIndex((item) => item.id === id)
     if(listData[Index].isChecked) {
       listData[Index] = { ...data, isChecked: false }
-      console.log("1111111111111");
-      document.getElementsByClassName("listData")[Index].classList.remove("completed")
-      document.getElementsByClassName("listData")[Index].classList.add("pending")
     } else {
-      console.log("222222222222");
-      document.getElementsByClassName("listData")[Index].classList.remove("pending")
-      document.getElementsByClassName("listData")[Index].classList.add("completed")
       listData[Index] = { ...data, isChecked: true }
     }
     console.log("dataaaaaaaa",listData);
+    setListData(listData)
   }
 
   const activeListData = () => {
-    document.getElementsByClassName("FooterButton")[0].classList.remove("activeButtonBorder")
-    document.getElementsByClassName("FooterButton")[2].classList.remove("activeButtonBorder")
-    document.getElementsByClassName("FooterButton")[1].classList.add("activeButtonBorder")
+    setButtonBorder({
+      all: false,
+      completed: false,
+      active: true
+    });
     const data = listData.filter((item) => item.isChecked !== true)
     console.log("data",data);
     setActiveData(data)
@@ -91,17 +93,21 @@ function App() {
   }
   
   const allListData = () => {
-    document.getElementsByClassName("FooterButton")[1].classList.remove("activeButtonBorder")
-    document.getElementsByClassName("FooterButton")[2].classList.remove("activeButtonBorder")
-    document.getElementsByClassName("FooterButton")[0].classList.add("activeButtonBorder")
+    setButtonBorder({
+      all: true,
+      completed: false,
+      active: false
+    });
     setActiveArray(false)
     setCompletedArray(false)
   }
   
   const completedListData = () => {
-    document.getElementsByClassName("FooterButton")[0].classList.remove("activeButtonBorder")
-    document.getElementsByClassName("FooterButton")[1].classList.remove("activeButtonBorder")
-    document.getElementsByClassName("FooterButton")[2].classList.add("activeButtonBorder")
+    setButtonBorder({
+      all: false,
+      completed: true,
+      active: false
+    });
     const data = listData.filter((item) => item.isChecked === true)
     setCompletedData(data)
     setActiveArray(false)
@@ -128,13 +134,16 @@ function App() {
             <ul className="ulList">
               {
                !completedArray && !activeArray ? listData.map((item, i) => {
-                 const checkedLine = item.isChecked
                   return (
                     <>
-                      <li className={`listData ${checkedLine ? "completed" : "pending"}`} key={i}>
-                        <input type="checkbox" className="checkBoxStyle" 
-                        isChecked={item.isChecked}
-                        onChange={() => toggleChecked(item.id)}/>
+                      <li className={`listData ${item.isChecked ? "completed" : "pending"}`} key={i}>
+                       {item.isChecked ? 
+                       <input type="checkbox" className="checkBoxStyle" 
+                      checked
+                       onChange={() => toggleChecked(item.id)}/>
+                       : 
+                       <input type="checkbox" className="checkBoxStyle" 
+                       onChange={() => toggleChecked(item.id)}/>}
                         <span className={`listTextStyle`}  onClick={() => editHandler(item)}>{item.name}</span>
                         <CloseOutlined className="closeIcon" onClick={() => removeEventListener(item.id)} />
                       </li>
@@ -178,9 +187,9 @@ function App() {
       <div className="container Footer">
         <ul className="ulFooter">
           <span className="footerLengthItem">Item : {listData.length}</span>
-          <li><button className="FooterButton active" onClick={() => allListData()}>All</button></li>
-          <li><button className="FooterButton" onClick={() => activeListData()}>Active</button></li>
-          <li><button className="FooterButton" onClick={() => completedListData()}>Completed</button></li>
+          <li><button className={`FooterButton ${buttonBorder.all ? "activeButtonBorder" : ""}`} onClick={() => allListData()}>All</button></li>
+          <li><button className={`FooterButton ${buttonBorder.active ? "activeButtonBorder" : ""}`} onClick={() => activeListData()}>Active</button></li>
+          <li><button className={`FooterButton ${buttonBorder.completed ? "activeButtonBorder" : ""}`} onClick={() => completedListData()}>Completed</button></li>
         </ul>
       </div>
     </div>
